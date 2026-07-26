@@ -1,11 +1,9 @@
 import DatasetHandler
 from Kmeans import Kmeans
 
-raw_data = DatasetHandler.process_dataset(r"C:\Users\ASUS\OneDrive\Documents\Python Projects\pythonProject1\machinelearning\kmeans_manual\kmeansmanual\WineQT.csv")
-data = list(raw_data)
-print(data)
-print("shape: ", data.shape)
-print("len: ", len(data))
+raw_data = DatasetHandler.process_dataset(r"C:\Users\aravi\OneDrive\Documents\Dhiva's Files\kmeans\kmeansmanual\WineQT.csv")
+raw_data = raw_data.drop(columns=["quality", "Id"])
+data = raw_data.values.tolist()
 
 kmean = Kmeans()
-kmean.initialize_centroids(data, 5)
+centroids = kmean.converge_centroids(data=data, target_k=5, n_iterations=50)

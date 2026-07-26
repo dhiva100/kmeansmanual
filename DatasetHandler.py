@@ -7,7 +7,7 @@ def process_dataset(csv_path):
 
     #read dataset
     data = pd.read_csv(csv_path)
-    print(f"Before normalizing: {data["alcohol"].values}")
+    print(f"Before normalizing: {data.values}")
 
     #validate columns for numerical types
     invalid_columns = []

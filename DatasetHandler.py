@@ -39,8 +39,14 @@ def normalize_features(data):
         data[column] = standardized_values
     return data, mean, std, min_value, max_value
 
-def denormalize_centroid(data, centroids):
+def denormalize_centroid(data_property, centroids):
+    mean, std, min_value, max_value = data_property
+    denormalized_centroids = []
     for centroid in centroids:
-        for value in centroid:
-            for column in data.columns:
-                pass
+        normal_values = []
+        for i in range(len(centroid)):
+            denormalized_centroid = (centroid[i]*(max_value[i]-min_value[i])) + min_value[i]
+            destandardized_centroid = (denormalized_centroid*std[i]) + mean[i]
+            normal_values.append(destandardized_centroid)
+        denormalized_centroids.append(normal_values)
+    return denormalized_centroids

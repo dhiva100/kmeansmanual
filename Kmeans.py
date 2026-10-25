@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import random
 
 class Kmeans:
     def __init__(self):
@@ -145,6 +146,46 @@ class Kmeans:
         plt.grid(True)
         plt.show()
         self.visualize_clusters(data, centroid_pos, cluster_assignment)
+
+
+    def kmeans_plus_plus_initailization(self, data, target_k):
+        self.training_data = data
+        self.reset_cluster_assignments(target_k)
+        first_centroid = np.random.randint(0, len(self.training_data))
+        first_centroid = data[first_centroid]
+        self.clusters["cluster_0"] = first_centroid
+        for i in range(target_k):
+            distances = []
+            for datapoint in data:
+                cluster_distance = []
+                for k in range(len(self.clusters)):
+                    distance = self.calculate_distance(self.clusters[f"cluster_{k}"], datapoint)
+                    cluster_distance.append(distance)
+                distances.append(min(cluster_distance)**2)
+            print("distances: ", distances)
+            probabilities = [distance_square/sum(distances) for distance_square in distances]
+            # cumulative_probabilities = [sum(probabilities[0:probabilities.index(probability)]) for probability in probabilities]
+            cumulative_probabilities = []
+            for p in range(len(probabilities)):
+                probability = probabilities[p]
+                if i != 0:
+                    cumulative_probabilities.append((probability + cumulative_probabilities[p-1]))
+                else:
+                    cumulative_probabilities.append(probability)
+            # cum_prob = np.cumsum(cumulative_probabilities)
+            # print("min prob: ", min(probabilities))
+            # print("max prob: ", max(probabilities))
+            # print("cumulative_probabilities: ", cumulative_probabilities)
+            new_int = random.uniform(min(probabilities), 1)
+            print("random int: ", new_int)
+            for prob in cumulative_probabilities:
+                if prob >= new_int:
+                    prob_pos = cumulative_probabilities.index(prob)
+                    break;
+            print("prob index: ", prob_pos)
+            print("prob: ", prob)
+            self.clusters[f"cluster_{i}"] = data[prob_pos]
+            print(self.clusters[f"cluster_{i}"])
 
 
 
